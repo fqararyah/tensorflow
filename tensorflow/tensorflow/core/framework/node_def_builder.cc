@@ -199,7 +199,7 @@ NodeDefBuilder& NodeDefBuilder::ControlInput(StringPiece src_node) {
 }
 
 NodeDefBuilder& NodeDefBuilder::Device(StringPiece device_spec) {
-  printf("This is internal string format: %s \n: ", std::string(device_spec).c_str());
+  //printf("This is internal string format: %s \n: ", std::string(device_spec).c_str());
   node_def_.set_device(std::string(device_spec));
   return *this;
 }

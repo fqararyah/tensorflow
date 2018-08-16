@@ -333,7 +333,7 @@ Status DirectSession::MaybeInitializeExecutionState(
     *out_already_initialized = true;
     return Status::OK();
   }
-  printf("GraphDef before execution state is created: %s \n",SummarizeGraphDef(graph).c_str());
+  //printf("GraphDef before execution state is created: %s \n",SummarizeGraphDef(graph).c_str());
   // Set up the per-session execution state.
   // NOTE(mrry): The function library created here will be used for
   // all subsequent extensions of the graph.
@@ -1098,7 +1098,6 @@ Status DirectSession::CreateExecutors(
     std::unique_ptr<FunctionInfo>* out_func_info,
     RunStateArgs* run_state_args) {
 
-  printf("The devices for this session: %s\n\n ", device_mgr_.get()->DebugString().c_str());
 
   BuildGraphOptions options;
   options.callable_options = callable_options;

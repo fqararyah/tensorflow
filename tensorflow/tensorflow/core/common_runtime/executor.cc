@@ -24,6 +24,7 @@ limitations under the License.
 #include <time.h>
 #include <sys/time.h>
 #include <sys/timeb.h>
+#include <chrono>
 
 #include "tensorflow/core/common_runtime/costmodel_manager.h"
 #include "tensorflow/core/common_runtime/executor_factory.h"
@@ -131,6 +132,11 @@ bool SetTimelineLabel(const Node* node, NodeExecStatsWrapper* stats) {
 namespace nodestats {
 inline int64 NowInUsec() { return Env::Default()->NowMicros(); }
 
+int64 GetEndUsec(NodeExecStatsWrapper* stats) {
+	if(!stats) return 0;
+	NodeExecStats* nt = stats->stats();
+	return nt->op_end_rel_micros(); //- nt->op_end_rel_micros();
+}
 void SetScheduled(NodeExecStatsWrapper* stats, int64 t) {
   if (!stats) return;
   stats->stats()->set_scheduled_micros(t);
@@ -1681,6 +1687,7 @@ void ExecutorState::Process(TaggedNode tagged_node, int64 scheduled_usec) {
 
     params.track_allocations = false;
     stats = nullptr;
+    /////DEBUG-DOGA-STEPSTATS/////////
     if (stats_collector_ && !tagged_node.is_dead) {
       // track allocations if and only if we are collecting statistics
       params.track_allocations = true;
@@ -1735,6 +1742,7 @@ void ExecutorState::Process(TaggedNode tagged_node, int64 scheduled_usec) {
 
       if (item.kernel_is_async) {
         // Asynchronous computes.
+
         AsyncOpKernel* async = item.kernel->AsAsync();
         DCHECK(async != nullptr);
         launched_asynchronously = true;
@@ -1745,8 +1753,12 @@ void ExecutorState::Process(TaggedNode tagged_node, int64 scheduled_usec) {
           Device* device = impl_->params_.device;
           NodeExecStatsWrapper* stats = state->stats;  // Shorthand
           Entry* first_input = state->first_input;     // Shorthand
-
+          //string op_name = op_kernel->name();
+          //string op_type = op_kernel->type_string();
           nodestats::SetOpEnd(stats);
+
+          //auto end_time = nodestats::GetEndUsec(stats);
+          //printf("(Async) Computation time for kernel %s of type %s: %llu \n", op_name.c_str(), op_type.c_str(), end_time);
           EntryVector outputs;
           Status s = ProcessOutputs(*state->item, &state->ctx, &outputs, stats);
           nodestats::SetMemory(stats, &state->ctx);
@@ -1787,13 +1799,26 @@ void ExecutorState::Process(TaggedNode tagged_node, int64 scheduled_usec) {
           if (completed) Finish();
         };
         nodestats::SetOpStart(stats);
+
         device->ComputeAsync(async, &state->ctx, done);
+
+        //printf("Measured time for kernel %s: %f us\n", op_kernel->name().c_str(), std::chrono::duration_cast<nano>(finish-start).count());
       } else {
         // Synchronous computes.
         OpKernelContext ctx(&params, item.num_outputs);
         nodestats::SetOpStart(stats);
         device->Compute(CHECK_NOTNULL(op_kernel), &ctx);
         nodestats::SetOpEnd(stats);
+        string op_name = item.node->name();
+        string kernel_n = op_kernel->name();
+        string op_type = op_kernel->type_string();
+        string op_device = op_kernel->requested_device();
+
+        //NodeExecStats* temp_stats = stats->stats();
+        auto end_time = nodestats::GetEndUsec(stats);
+
+        printf("Here is the computation time for kernel %s of type %s on device %s: %llu \n", kernel_n.c_str(), op_type.c_str(), op_device.c_str(), end_time);
+        //printf("Op Kernel %s took %f to execute \n", stats->stats())
         s = ProcessOutputs(item, &ctx, &outputs, stats);
         if (s.ok() && impl_->device_record_tensor_accesses_) {
           // Get the list of all tensors accessed during the execution

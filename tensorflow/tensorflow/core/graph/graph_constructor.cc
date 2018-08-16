@@ -20,6 +20,8 @@ limitations under the License.
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <nlohmann/json.hpp>
+#include <fstream>
 
 #include "tensorflow/core/common_runtime/shape_refiner.h"
 #include "tensorflow/core/framework/function.h"
@@ -574,18 +576,31 @@ Status GraphConstructor::MakeNode(const NodeDef& node_def, Node** node) {
   Status status;
   *node = g_->AddNode(node_def, &status);
   if (!status.ok()) return status;
-  printf("Node: %s\n", node_def.name().c_str());
-  printf("Node device: %s\n\n", node_def.device().c_str());
+  //Iterate over neighbors of node
+  printf("====================Reading json file\n\n");
+  std::ifstream profile_file("/home/3dd/timeline.json", std::ifstream::binary);
+  profile_file >> profile;
+  if(strcmp((*node)->name().c_str(), "toy_op/MatMul")){
+  	  cout << profile;
+  }
+  //////////DEBUG-DOGA-MAKENODE///////////////////
+  printf("NodeDef: %s\n", node_def.name().c_str());
+  printf("NodeDef device: %s\n", node_def.device().c_str());
+  printf("NodeDef type: %s\n", node_def.op().c_str());
+  printf("Node: %s\n", (*node)->name().c_str());
+  printf("Node device: %s\n", (*node)->assigned_device_name().c_str());
+  printf("Node type: %s\n\n", (*node)->type_string().c_str());
   int mod=0;
-  if
-  if((*node)->id()%2==0){
+
+  if(strcmp((*node)->name().c_str(), "toy_op/MatMul")){
 	  (*node)->set_assigned_device_name("/job:localhost/replica:0/task:0/device:GPU:3");
   }
-  else{
+  else if(strcmp((*node)->name().c_str(), "toy_op/MatMul_1")){
 	  (*node)->set_assigned_device_name("/job:localhost/replica:0/task:0/device:GPU:2");
   }
+
   if (opts_.expect_device_spec) {
-	printf("Node: %s is statically mapped\n\n", node_def.name().c_str());
+	//printf("Node: %s is statically mapped\n\n", node_def.name().c_str());
     (*node)->set_assigned_device_name(node_def.device());
   }
   return Status::OK();
@@ -1192,7 +1207,8 @@ Status GraphConstructor::MakeEdge(Node* src, int output_index, Node* dst,
         DataTypeString(src_out), " from ", src->name(), ":", output_index,
         " incompatible with expected ", DataTypeString(dst_in), ".");
   }
-  g_->AddEdge(src, output_index, dst, input_index);
+  const Edge* e = g_->AddEdge(src, output_index, dst, input_index);
+  printf("\"%s\" -> \"%s\";\n", e->src()->name().c_str(), e->dst()->name().c_str());
   return Status::OK();
 }
 

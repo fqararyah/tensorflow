@@ -1325,7 +1325,21 @@ class OpKernelRegistrar {
 };
 
 }  // namespace kernel_factory
+// OpKernel registration ------------------------------------------------------
 
+struct KernelRegistration {
+  KernelRegistration(const KernelDef& d, StringPiece c,
+                     kernel_factory::OpKernelRegistrar::Factory f)
+      : def(d), kernel_class_name(std::string(c)), factory(f) {}
+  const KernelDef def;
+  const string kernel_class_name;
+  const kernel_factory::OpKernelRegistrar::Factory factory;
+};
+
+Status FindKernelRegistration(const DeviceType& device_type,
+                              const NodeDef& node_def,
+                              const KernelRegistration** reg,
+                              bool* was_attr_mismatch);
 // -----------------------------------------------------------------------------
 // Template and inline method implementations, please ignore
 

@@ -20,7 +20,7 @@ limitations under the License.
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <nlohmann/json.hpp>
+//#include <nlohmann/json.hpp>
 #include <fstream>
 
 #include "tensorflow/core/common_runtime/shape_refiner.h"
@@ -29,6 +29,7 @@ limitations under the License.
 #include "tensorflow/core/framework/graph.pb.h"
 #include "tensorflow/core/framework/node_def.pb.h"
 #include "tensorflow/core/framework/node_def_util.h"
+#include "tensorflow/core/framework/op_kernel.h"
 #include "tensorflow/core/framework/tensor_shape.pb.h"
 #include "tensorflow/core/framework/types.h"
 #include "tensorflow/core/framework/versions.h"
@@ -42,6 +43,8 @@ limitations under the License.
 #include "tensorflow/core/lib/strings/str_util.h"
 #include "tensorflow/core/platform/logging.h"
 #include "tensorflow/core/public/version.h"
+
+//using json = nlohmann::json; //easy json parser
 
 namespace tensorflow {
 
@@ -93,6 +96,7 @@ class GraphConstructor {
     bool allow_internal_ops;
     bool expect_device_spec;
 
+
     string prefix;
     bool uniquify_names;
     bool uniquify_prefix;
@@ -132,6 +136,7 @@ class GraphConstructor {
     GraphConstructor c(opts, node_defs, versions, library, g, refiner,
                        return_tensors, return_nodes,
                        missing_unused_input_map_keys);
+
     const Status s = c.TryImport();
     if (!s.ok()) c.Undo();
     return s;
@@ -155,7 +160,7 @@ class GraphConstructor {
         refiner_(refiner),
         return_tensors_(return_tensors),
         return_nodes_(return_nodes),
-        missing_unused_input_map_keys_(missing_unused_input_map_keys) {}
+        missing_unused_input_map_keys_(missing_unused_input_map_keys){this->rr_counter=0;}
 
   Status TryImport() {
     TF_RETURN_IF_ERROR(EnsureNoNameCollisions());
@@ -240,6 +245,7 @@ class GraphConstructor {
   const FunctionDefLibrary* library_;
   Graph* g_;
   const VersionDef original_versions_;
+  int rr_counter;
 
   // A copy of opts_.prefix, possibly uniquified.
   string prefix_;
@@ -576,14 +582,45 @@ Status GraphConstructor::MakeNode(const NodeDef& node_def, Node** node) {
   Status status;
   *node = g_->AddNode(node_def, &status);
   if (!status.ok()) return status;
-  //Iterate over neighbors of node
-  printf("====================Reading json file\n\n");
-  std::ifstream profile_file("/home/3dd/timeline.json", std::ifstream::binary);
-  profile_file >> profile;
-  if(strcmp((*node)->name().c_str(), "toy_op/MatMul")){
-  	  cout << profile;
+  //Check if the op kernel has an implementation on the GPU, if there is, perform round-robin
+  //placement
+  const OpRegistrationData* op_reg_data;
+  const Status s = OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  const DeviceType& gpu_type = DeviceType("GPU");
+  if(s.ok()){
+	  const KernelRegistration* reg = nullptr;
+	  bool was_attr_mismatch;
+	  TF_RETURN_IF_ERROR(
+			  FindKernelRegistration(gpu_type, node_def, &reg, &was_attr_mismatch));
+	  if(reg != nullptr){
+		  (*node)->set_assigned_device_name("/job:localhost/replica:0/task:0/device:GPU:" + std::to_string(rr_counter%4));
+		  ++rr_counter;
+	  }
+
   }
+  //Iterate over neighbors of node
+  //printf("====================Reading json file\n\n");
+  //json j;
+  //The counter responsible for round-robin assignment
+  int round_rcounter = 0;
+  /*DEBUG-DOGA/
+  if(strcmp((*node)->name().c_str(), "toy_op/MatMul")){
+	  std::ifstream i("/home/3dd/timeline.json");
+
+	  i >> j;
+	  json content = j["traceEvents"][0];
+
+	  for(json::iterator it = content.begin(); it != content.end(); ++it){
+		  std::cout << it.key() << " : " << it.value() << "\n";
+	  }
+  }
+  */
+  ////////////////TEST/////////////////////////////////
+
+
+
   //////////DEBUG-DOGA-MAKENODE///////////////////
+  /*
   printf("NodeDef: %s\n", node_def.name().c_str());
   printf("NodeDef device: %s\n", node_def.device().c_str());
   printf("NodeDef type: %s\n", node_def.op().c_str());
@@ -598,7 +635,7 @@ Status GraphConstructor::MakeNode(const NodeDef& node_def, Node** node) {
   else if(strcmp((*node)->name().c_str(), "toy_op/MatMul_1")){
 	  (*node)->set_assigned_device_name("/job:localhost/replica:0/task:0/device:GPU:2");
   }
-
+  */
   if (opts_.expect_device_spec) {
 	//printf("Node: %s is statically mapped\n\n", node_def.name().c_str());
     (*node)->set_assigned_device_name(node_def.device());

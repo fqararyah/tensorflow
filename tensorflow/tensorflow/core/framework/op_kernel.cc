@@ -921,16 +921,7 @@ void OpKernelContext::clear_recorded_memory() {
   }
 }
 
-// OpKernel registration ------------------------------------------------------
 
-struct KernelRegistration {
-  KernelRegistration(const KernelDef& d, StringPiece c,
-                     kernel_factory::OpKernelRegistrar::Factory f)
-      : def(d), kernel_class_name(std::string(c)), factory(f) {}
-  const KernelDef def;
-  const string kernel_class_name;
-  const kernel_factory::OpKernelRegistrar::Factory factory;
-};
 
 // This maps from 'op_type' + DeviceType to the set of KernelDefs and
 // factory functions for instantiating the OpKernel that matches the
@@ -969,9 +960,6 @@ void OpKernelRegistrar::InitInternal(const KernelDef* kernel_def,
 }
 
 }  // namespace kernel_factory
-
-namespace {
-
 static const StringPiece kKernelAttr("_kernel");
 
 // TODO(irving): Replace with const Node& version below.
@@ -1006,8 +994,12 @@ Status FindKernelRegistration(const DeviceType& device_type,
   }
   return Status::OK();
 }
+/*
+namespace {
 
-}  // namespace
+////FindKernelRegistration was here
+
+} */ // namespace
 
 // TODO(irving): Change const NodeDef& to const Node&
 Status FindKernelDef(const DeviceType& device_type, const NodeDef& node_def,

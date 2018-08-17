@@ -584,20 +584,25 @@ Status GraphConstructor::MakeNode(const NodeDef& node_def, Node** node) {
   if (!status.ok()) return status;
   //Check if the op kernel has an implementation on the GPU, if there is, perform round-robin
   //placement
+
   const OpRegistrationData* op_reg_data;
   const Status s = OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
   const DeviceType& gpu_type = DeviceType("GPU");
+  //DataType input_type = (*node)->input_type()
+  /*
   if(s.ok()){
 	  const KernelRegistration* reg = nullptr;
 	  bool was_attr_mismatch;
 	  TF_RETURN_IF_ERROR(
 			  FindKernelRegistration(gpu_type, node_def, &reg, &was_attr_mismatch));
-	  if(reg != nullptr){
+	  //printf("Node type: %s", )
+	  if(reg != nullptr && strcmp((*node)->type_string().c_str(), "MatMul")){
 		  (*node)->set_assigned_device_name("/job:localhost/replica:0/task:0/device:GPU:" + std::to_string(rr_counter%4));
 		  ++rr_counter;
 	  }
 
   }
+	*/
   //Iterate over neighbors of node
   //printf("====================Reading json file\n\n");
   //json j;

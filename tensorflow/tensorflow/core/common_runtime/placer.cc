@@ -713,7 +713,8 @@ Status Placer::Run() {
   ColocationGraph colocation_graph(
       graph_, devices_,
       options_ == nullptr || options_->config.allow_soft_placement());
-
+  printf("================================Printing the graph with the internal method:\n");
+  graph_->printEdgesAndNodes();
   TF_RETURN_IF_ERROR(colocation_graph.InitializeMembers());
 
   // 1. First add all of the nodes. Note that steps (1) and (2)

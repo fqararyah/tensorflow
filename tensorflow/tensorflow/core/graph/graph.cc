@@ -522,16 +522,16 @@ const Edge* Graph::FindEdge(const Node* dst, int index) {
   }
   return nullptr;
 }
-/*
+
 void Graph::printEdgesAndNodes(){
   for(const Edge* e : edges_){
-    printf("%s\n", e->DebugString().c_str());
+    printf("Edge %s\n", e->DebugString().c_str());
   }
   for(const Node* n : nodes_){
-    printf("%s\n", n->DebugString().c_str());
+    printf("Node %s\n", n->DebugString().c_str());
   }
 }
-*/
+
 Status Graph::AddFunctionLibrary(const FunctionDefLibrary& fdef_lib) {
   // Need a new-enough consumer to support the functions we add to the graph.
   if (fdef_lib.function_size() > 0 && versions_->min_consumer() < 12) {

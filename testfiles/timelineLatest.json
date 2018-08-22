@@ -1,0 +1,825 @@
+{
+    "traceEvents": [
+        {
+            "ph": "M",
+            "args": {
+                "name": "Allocators"
+            },
+            "pid": 0,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:45 Compute"
+            },
+            "pid": 1,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:45 Tensors"
+            },
+            "pid": 2,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:41 Compute"
+            },
+            "pid": 3,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:41 Tensors"
+            },
+            "pid": 4,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/device:GPU:3 Compute"
+            },
+            "pid": 5,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/device:GPU:3 Tensors"
+            },
+            "pid": 6,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/device:GPU:1 Compute"
+            },
+            "pid": 7,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/device:GPU:1 Tensors"
+            },
+            "pid": 8,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:38 Compute"
+            },
+            "pid": 9,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:38 Tensors"
+            },
+            "pid": 10,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/device:CPU:0 Compute"
+            },
+            "pid": 11,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/device:CPU:0 Tensors"
+            },
+            "pid": 12,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:all Compute"
+            },
+            "pid": 13,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:all Tensors"
+            },
+            "pid": 14,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/memcpy Compute"
+            },
+            "pid": 15,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/memcpy Tensors"
+            },
+            "pid": 16,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:48 Compute"
+            },
+            "pid": 17,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:48 Tensors"
+            },
+            "pid": 18,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/device:GPU:2 Compute"
+            },
+            "pid": 19,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/device:GPU:2 Tensors"
+            },
+            "pid": 20,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:42 Compute"
+            },
+            "pid": 21,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:42 Tensors"
+            },
+            "pid": 22,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:46 Compute"
+            },
+            "pid": 23,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:46 Tensors"
+            },
+            "pid": 24,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:49 Compute"
+            },
+            "pid": 25,
+            "name": "process_name"
+        },
+        {
+            "ph": "M",
+            "args": {
+                "name": "/device:GPU:0/stream:49 Tensors"
+            },
+            "pid": 26,
+            "name": "process_name"
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_11_toy_op/MatMul_1",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 1,
+            "ts": 1534792102832691,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2768
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_10_toy_op/MatMul",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 3,
+            "ts": 1534792102827190,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2768
+        },
+        {
+            "name": "NoOp",
+            "args": {
+                "name": "_SOURCE",
+                "op": "NoOp"
+            },
+            "pid": 5,
+            "ts": 1534792102810473,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 23
+        },
+        {
+            "name": "VariableV2",
+            "args": {
+                "name": "toy_op/matrix_1",
+                "op": "VariableV2"
+            },
+            "pid": 5,
+            "ts": 1534792102810532,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 23
+        },
+        {
+            "name": "VariableV2",
+            "args": {
+                "name": "toy_op/matrix_2",
+                "op": "VariableV2"
+            },
+            "pid": 5,
+            "ts": 1534792102810559,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 7
+        },
+        {
+            "name": "VariableV2",
+            "args": {
+                "name": "toy_op/matrix_3",
+                "op": "VariableV2"
+            },
+            "pid": 5,
+            "ts": 1534792102810567,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 7
+        },
+        {
+            "name": "VariableV2",
+            "args": {
+                "name": "toy_op/matrix_4",
+                "op": "VariableV2"
+            },
+            "pid": 5,
+            "ts": 1534792102810575,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 9
+        },
+        {
+            "name": "Identity",
+            "args": {
+                "input0": "toy_op/matrix_1",
+                "name": "toy_op/matrix_1/read",
+                "op": "Identity"
+            },
+            "pid": 5,
+            "ts": 1534792102810586,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 6
+        },
+        {
+            "name": "Identity",
+            "args": {
+                "input0": "toy_op/matrix_2",
+                "name": "toy_op/matrix_2/read",
+                "op": "Identity"
+            },
+            "pid": 5,
+            "ts": 1534792102810595,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 4
+        },
+        {
+            "name": "Identity",
+            "args": {
+                "input0": "toy_op/matrix_3",
+                "name": "toy_op/matrix_3/read",
+                "op": "Identity"
+            },
+            "pid": 5,
+            "ts": 1534792102810601,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 6
+        },
+        {
+            "name": "Identity",
+            "args": {
+                "input0": "toy_op/matrix_4",
+                "name": "toy_op/matrix_4/read",
+                "op": "Identity"
+            },
+            "pid": 5,
+            "ts": 1534792102810609,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 4
+        },
+        {
+            "name": "Add",
+            "args": {
+                "input0": "toy_op/MatMul/_39",
+                "input1": "toy_op/MatMul_1/_41",
+                "name": "toy_op/Add",
+                "op": "Add"
+            },
+            "pid": 5,
+            "ts": 1534792102835507,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 89
+        },
+        {
+            "name": "toy_op/MatMul",
+            "pid": 7,
+            "ts": 1534792102816578,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "s",
+            "id": 0
+        },
+        {
+            "name": "toy_op/MatMul",
+            "pid": 5,
+            "ts": 1534792102835507,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "t",
+            "id": 0
+        },
+        {
+            "name": "toy_op/MatMul_1",
+            "pid": 19,
+            "ts": 1534792102822075,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "s",
+            "id": 1
+        },
+        {
+            "name": "toy_op/MatMul_1",
+            "pid": 5,
+            "ts": 1534792102835507,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "t",
+            "id": 1
+        },
+        {
+            "name": "NoOp",
+            "args": {
+                "name": "_SOURCE",
+                "op": "NoOp"
+            },
+            "pid": 7,
+            "ts": 1534792102810482,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 27
+        },
+        {
+            "name": "MatMul",
+            "args": {
+                "input0": "toy_op/matrix_1/read/_31",
+                "input1": "toy_op/matrix_2/read/_33",
+                "name": "toy_op/MatMul",
+                "op": "MatMul"
+            },
+            "pid": 7,
+            "ts": 1534792102816373,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 205
+        },
+        {
+            "name": "toy_op/matrix_1/read",
+            "pid": 5,
+            "ts": 1534792102810592,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "s",
+            "id": 2
+        },
+        {
+            "name": "toy_op/matrix_1/read",
+            "pid": 7,
+            "ts": 1534792102816373,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "t",
+            "id": 2
+        },
+        {
+            "name": "toy_op/matrix_2/read",
+            "pid": 5,
+            "ts": 1534792102810599,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "s",
+            "id": 3
+        },
+        {
+            "name": "toy_op/matrix_2/read",
+            "pid": 7,
+            "ts": 1534792102816373,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "t",
+            "id": 3
+        },
+        {
+            "name": "MatMul",
+            "args": {
+                "name": "toy_op/MatMul",
+                "op": "MatMul"
+            },
+            "pid": 9,
+            "ts": 1534792102816546,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 10634
+        },
+        {
+            "name": "NoOp",
+            "args": {
+                "name": "_SOURCE",
+                "op": "NoOp"
+            },
+            "pid": 11,
+            "ts": 1534792102810482,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 8
+        },
+        {
+            "name": "_Retval",
+            "args": {
+                "input0": "toy_op/Add/_43",
+                "name": "_retval_toy_op/Add_0_0",
+                "op": "_Retval"
+            },
+            "pid": 11,
+            "ts": 1534792102878609,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 6
+        },
+        {
+            "name": "toy_op/Add",
+            "pid": 5,
+            "ts": 1534792102835596,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "s",
+            "id": 4
+        },
+        {
+            "name": "toy_op/Add",
+            "pid": 11,
+            "ts": 1534792102878609,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "t",
+            "id": 4
+        },
+        {
+            "name": "MatMul",
+            "args": {
+                "name": "toy_op/MatMul",
+                "op": "MatMul"
+            },
+            "pid": 13,
+            "ts": 1534792102816546,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 10634
+        },
+        {
+            "name": "MatMul",
+            "args": {
+                "name": "toy_op/MatMul_1",
+                "op": "MatMul"
+            },
+            "pid": 13,
+            "ts": 1534792102822053,
+            "cat": "Op",
+            "tid": 1,
+            "ph": "X",
+            "dur": 10636
+        },
+        {
+            "name": "Add",
+            "args": {
+                "name": "toy_op/Add",
+                "op": "Add"
+            },
+            "pid": 13,
+            "ts": 1534792102835583,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 248
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_6_toy_op/matrix_1/read",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 15,
+            "ts": 1534792102810734,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2769
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_7_toy_op/matrix_2/read",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 15,
+            "ts": 1534792102813508,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2767
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_8_toy_op/matrix_3/read",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 15,
+            "ts": 1534792102816282,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2768
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_9_toy_op/matrix_4/read",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 15,
+            "ts": 1534792102819054,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2767
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_10_toy_op/MatMul",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 15,
+            "ts": 1534792102827190,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2768
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_11_toy_op/MatMul_1",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 15,
+            "ts": 1534792102832691,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2768
+        },
+        {
+            "name": "MEMCPYDtoH",
+            "args": {
+                "name": "edge_17_toy_op/Add",
+                "op": "MEMCPYDtoH"
+            },
+            "pid": 15,
+            "ts": 1534792102873418,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 5110
+        },
+        {
+            "name": "MEMCPYDtoH",
+            "args": {
+                "name": "edge_17_toy_op/Add",
+                "op": "MEMCPYDtoH"
+            },
+            "pid": 17,
+            "ts": 1534792102873418,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 5110
+        },
+        {
+            "name": "NoOp",
+            "args": {
+                "name": "_SOURCE",
+                "op": "NoOp"
+            },
+            "pid": 19,
+            "ts": 1534792102810473,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 29
+        },
+        {
+            "name": "MatMul",
+            "args": {
+                "input0": "toy_op/matrix_3/read/_35",
+                "input1": "toy_op/matrix_4/read/_37",
+                "name": "toy_op/MatMul_1",
+                "op": "MatMul"
+            },
+            "pid": 19,
+            "ts": 1534792102821924,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 151
+        },
+        {
+            "name": "toy_op/matrix_3/read",
+            "pid": 5,
+            "ts": 1534792102810607,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "s",
+            "id": 5
+        },
+        {
+            "name": "toy_op/matrix_3/read",
+            "pid": 19,
+            "ts": 1534792102821924,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "t",
+            "id": 5
+        },
+        {
+            "name": "toy_op/matrix_4/read",
+            "pid": 5,
+            "ts": 1534792102810613,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "s",
+            "id": 6
+        },
+        {
+            "name": "toy_op/matrix_4/read",
+            "pid": 19,
+            "ts": 1534792102821924,
+            "cat": "DataFlow",
+            "tid": 0,
+            "ph": "t",
+            "id": 6
+        },
+        {
+            "name": "MatMul",
+            "args": {
+                "name": "toy_op/MatMul_1",
+                "op": "MatMul"
+            },
+            "pid": 21,
+            "ts": 1534792102822053,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 10636
+        },
+        {
+            "name": "Add",
+            "args": {
+                "name": "toy_op/Add",
+                "op": "Add"
+            },
+            "pid": 23,
+            "ts": 1534792102835583,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 248
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_6_toy_op/matrix_1/read",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 25,
+            "ts": 1534792102810734,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2769
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_7_toy_op/matrix_2/read",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 25,
+            "ts": 1534792102813508,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2767
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_8_toy_op/matrix_3/read",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 25,
+            "ts": 1534792102816282,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2768
+        },
+        {
+            "name": "MEMCPYPtoP",
+            "args": {
+                "name": "edge_9_toy_op/matrix_4/read",
+                "op": "MEMCPYPtoP"
+            },
+            "pid": 25,
+            "ts": 1534792102819054,
+            "cat": "Op",
+            "tid": 0,
+            "ph": "X",
+            "dur": 2767
+        }
+    ]
+}

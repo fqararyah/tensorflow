@@ -589,20 +589,22 @@ Status GraphConstructor::MakeNode(const NodeDef& node_def, Node** node) {
   const Status s = OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
   const DeviceType& gpu_type = DeviceType("GPU");
   //DataType input_type = (*node)->input_type()
-  /*
+
   if(s.ok()){
 	  const KernelRegistration* reg = nullptr;
 	  bool was_attr_mismatch;
 	  TF_RETURN_IF_ERROR(
 			  FindKernelRegistration(gpu_type, node_def, &reg, &was_attr_mismatch));
 	  //printf("Node type: %s", )
-	  if(reg != nullptr && strcmp((*node)->type_string().c_str(), "MatMul")){
-		  (*node)->set_assigned_device_name("/job:localhost/replica:0/task:0/device:GPU:" + std::to_string(rr_counter%4));
-		  ++rr_counter;
+	  if((*node)->type_string().compare(std::string("Conv2D")) == 0 || (*node)->type_string().compare(std::string("MatMul")) == 0){
+		  //if(reg != nullptr && !IsRefType((*node)->output_type(0)) && !IsRefType((*node)->input_type(0))){
+		  	  (*node)->set_assigned_device_name("/job:localhost/replica:0/task:0/device:GPU:" + std::to_string(rr_counter%4));
+		  	  ++rr_counter;
+	  	  //}
 	  }
 
   }
-	*/
+
   //Iterate over neighbors of node
   //printf("====================Reading json file\n\n");
   //json j;
@@ -1250,7 +1252,8 @@ Status GraphConstructor::MakeEdge(Node* src, int output_index, Node* dst,
         " incompatible with expected ", DataTypeString(dst_in), ".");
   }
   const Edge* e = g_->AddEdge(src, output_index, dst, input_index);
-  printf("\"%s\" -> \"%s\";\n", e->src()->name().c_str(), e->dst()->name().c_str());
+  ////DEBUG-DOGA DOT EXPORTER
+  //printf("\"%s\" -> \"%s\";\n", e->src()->name().c_str(), e->dst()->name().c_str());
   return Status::OK();
 }
 

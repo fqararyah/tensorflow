@@ -1809,15 +1809,15 @@ void ExecutorState::Process(TaggedNode tagged_node, int64 scheduled_usec) {
         nodestats::SetOpStart(stats);
         device->Compute(CHECK_NOTNULL(op_kernel), &ctx);
         nodestats::SetOpEnd(stats);
-        string op_name = item.node->name();
-        string kernel_n = op_kernel->name();
-        string op_type = op_kernel->type_string();
-        string op_device = op_kernel->requested_device();
+        //string op_name = item.node->name();
+        //string kernel_n = op_kernel->name();
+        //string op_type = op_kernel->type_string();
+        //string op_device = op_kernel->requested_device();
 
         //NodeExecStats* temp_stats = stats->stats();
-        auto end_time = nodestats::GetEndUsec(stats);
+        //auto end_time = nodestats::GetEndUsec(stats);
 
-        printf("Here is the computation time for kernel %s of type %s on device %s: %llu \n", kernel_n.c_str(), op_type.c_str(), op_device.c_str(), end_time);
+        //printf("Here is the computation time for kernel %s of type %s on device %s: %llu \n", kernel_n.c_str(), op_type.c_str(), op_device.c_str(), end_time);
         //printf("Op Kernel %s took %f to execute \n", stats->stats())
         s = ProcessOutputs(item, &ctx, &outputs, stats);
         if (s.ok() && impl_->device_record_tensor_accesses_) {

@@ -535,7 +535,7 @@ void Graph::printEdgesAndNodes(){
 void Graph::generateDotOut(){
 	for(const Edge* e: edges_) {
 		if(!e->IsControlEdge()) {
-			printf("\"%s\" -> \"%s\"\n", e->src()->type_string().c_str(), e->dst()->type_string().c_str());
+			printf("\"%s\" -> \"%s\";\n", e->src()->name().c_str(), e->dst()->name().c_str());
 		}
 	}
 }

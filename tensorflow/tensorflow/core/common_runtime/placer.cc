@@ -71,6 +71,7 @@ std::vector<Device*> FilterSupportedDevices(
   return filtered_devices;
 }
 
+
 // This class maintains the connected components of a colocation
 // constraint graph, and uses this information to assign a satisfying
 // device placement to the nodes of the graph.
@@ -417,7 +418,8 @@ class ColocationGraph {
 
   Status InitializeMembers() {
 	//Dump the graph to .dot file
-	graph_->generateDotOut();
+	//graph_->generateDotOut();
+	printf("%d\n\n", no_of_roots());
     for (Node* node : graph_->nodes()) {
       if (!node->IsOp()) {
         continue;
@@ -630,7 +632,16 @@ class ColocationGraph {
     DCHECK_GE(parent, 0);
     return parent;
   }
-
+  int no_of_roots(){
+	  int res = 0;
+	  for(Node* n:graph_->nodes()) {
+		  if(n->in_edges().empty()) {
+			  printf("%s\n\n", n->name().c_str());
+			  res++;
+		  }
+	  }
+	  return res;
+  }
   // Ensures that the devices of 'dst's resource and reference match the device
   // specified for 'src', which is an input of 'dst' with a partially or fully
   // specified device.

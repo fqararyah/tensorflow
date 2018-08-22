@@ -418,8 +418,8 @@ class ColocationGraph {
 
   Status InitializeMembers() {
 	//Dump the graph to .dot file
-	//graph_->generateDotOut();
-	printf("%d\n\n", no_of_roots());
+	graph_->generateDotOut(true);
+	//printf("%d\n\n", no_of_roots());
     for (Node* node : graph_->nodes()) {
       if (!node->IsOp()) {
         continue;

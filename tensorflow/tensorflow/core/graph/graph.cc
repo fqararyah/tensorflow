@@ -532,9 +532,12 @@ void Graph::printEdgesAndNodes(){
   }
 }
 
-void Graph::generateDotOut(){
+void Graph::generateDotOut(bool controlEdges){
 	for(const Edge* e: edges_) {
-		if(!e->IsControlEdge()) {
+		if(!controlEdges && e->IsControlEdge()) {
+			continue;
+		}
+		else {
 			printf("\"%s\" -> \"%s\";\n", e->src()->name().c_str(), e->dst()->name().c_str());
 		}
 	}

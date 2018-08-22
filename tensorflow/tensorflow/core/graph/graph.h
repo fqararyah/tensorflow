@@ -550,7 +550,7 @@ class Graph {
   int num_edge_ids() const { return edges_.size(); }
 
   void printEdgesAndNodes();
-  void generateDotOut();
+  void generateDotOut(bool controlEdges);
   // Returns the Edge associated with an id, or nullptr if no edge
   // with that id (the node with that id was removed and the id has
   // not yet been re-used). *this owns the returned instance.

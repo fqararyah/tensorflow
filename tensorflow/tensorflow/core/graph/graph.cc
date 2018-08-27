@@ -532,6 +532,44 @@ void Graph::printEdgesAndNodes(){
   }
 }
 
+void Graph::generateGEXFOut(){
+	printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+	printf("<gexf xmlns=\"http://www.gexf.net/1.2draft\" version=\"1.2\"\n");
+	printf("<graph mode=\"static\" defaultedgetype=\"directed\"\n");
+	printf("<nodes>\n");
+	//nodes
+	for(Node* n: nodes_) {
+		printf("<node id=\"%d\" label=\"%s\"/>\n", n->id(), n->name().c_str());
+	}
+	printf("</nodes>\n");
+	printf("<edges>\n");
+	//edges
+	for(Edge* e: edges_) {
+		printf("<edge id=\"%d\" source=\"%d\" target=\"%d\"/>\n", e->id(), e->src()->id(), e->dst()->id());
+	}
+	printf("</edges>\n");
+	printf("</graph>\n");
+	printf("</gexf>\n");
+}
+
+void Graph::printNonSpecialNodes() {
+	int count=0;
+	for(Node* n: nodes_) {
+		if(n->IsOther()) {
+			++count;
+			printf("Node %s of type %s\n",n->name().c_str(), n->type_string().c_str());
+		}
+	}
+	printf("There are %d non-special nodes in total.\n", count);
+}
+void Graph::printNonOpNodes() {
+	for(Node* n: nodes_) {
+		if(!n->IsOp()) {
+			printf("Non-op node %s of type %s\n", n->name().c_str(), n->type_string().c_str());
+		}
+	}
+
+}
 void Graph::generateDotOut(bool controlEdges){
 	for(const Edge* e: edges_) {
 		if(!controlEdges && e->IsControlEdge()) {

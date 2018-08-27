@@ -419,7 +419,14 @@ class ColocationGraph {
   Status InitializeMembers() {
 	//Dump the graph to .dot file
 	graph_->generateDotOut(true);
+	//Dump the graph to .gexf file
+	//graph_->generateGEXFOut();
+	//graph_->printNonOpNodes();
+
+	//graph_->printNonSpecialNodes();
+
 	//printf("%d\n\n", no_of_roots());
+
     for (Node* node : graph_->nodes()) {
       if (!node->IsOp()) {
         continue;

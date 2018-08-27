@@ -167,6 +167,8 @@ class Node {
 
   bool IsMetadata() const { return class_ == NC_METADATA; }
 
+  bool IsOther() const {return class_ == NC_OTHER;} //FOR NON-SPECIAL NODES
+
   template <typename T>
   void AddAttr(const string& name, const T& val) {
     SetAttrValue(val, AddAttrHelper(name));
@@ -550,6 +552,11 @@ class Graph {
   int num_edge_ids() const { return edges_.size(); }
 
   void printEdgesAndNodes();
+
+  void printNonOpNodes();
+  void printNonSpecialNodes();
+
+  void generateGEXFOut();
   void generateDotOut(bool controlEdges);
   // Returns the Edge associated with an id, or nullptr if no edge
   // with that id (the node with that id was removed and the id has

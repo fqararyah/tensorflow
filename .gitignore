@@ -33,3 +33,4 @@
 
 #ptp sync
 *.ptp-sync/
+*.dot

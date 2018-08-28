@@ -4,6 +4,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <stack>
+#include <map>
+#include "simulatePlacement.h"
 
 #define MIN_PER_RANK 1 /* Nodes/Rank: How 'fat' the DAG should be.  */
 #define MAX_PER_RANK 5
@@ -13,107 +16,108 @@
 
 
 using namespace std;
-
+/*
 class DGraph;
 class Node;
 class Edge;
-
+*/
 void exportToDot(DGraph g);
+////TimePartition./////
+bool TimePartition::containsTP(TimePartition* tp){
+  if(this->start <= tp->start && this->end >= tp->end) {
+      return true;
+    }
+    else {
+      return false;
+    }
+}
+void TimePartition::printTP() {
+    printf("Start: %d,", this->start);
+    printf("End: %d, ", this->end);
+    printf("Device: %d\n", this->device);
+}
+///////////////////////////
 
-class Node{
-  int id;
-  string name;
-  int weight;
-  vector<Edge *> childrenEdges;
-  bool visited;
-  int device;
+//////////////////////Node/////////////////////////////
+int GNode::getWeight() { return this->weight;}
+int GNode::getID() { return this->id;}
+int GNode::getDevice(){ return this->device;}
+string GNode::getName() { return this->name;}
+vector<GEdge *> GNode::getChildrenEdges() { return this->childrenEdges;}
+void GNode::setVisited(bool v) { this->visited=v;}
+bool GNode::getVisited() { return this->visited;}
+void GNode::setWeight(int w) { this->weight=w;}
+void GNode::setDevice(int d) { this->device=d;}
 
-public:
-  int getWeight() { return weight;}
-  int getID() { return id;}
-  int getDevice(){ return device;}
-  string getName() { return name;}
-  vector<Edge *> getChildrenEdges() { return childrenEdges;}
-  void setVisited(bool v) { visited=v;}
-  bool getVisited() { return visited;}
-  void setWeight(int w) { weight=w;}
-  void setDevice(int d) { device=d;}
-
-  void addEdge(Edge* e) { childrenEdges.push_back(e); }
-  //void removeEdge(Edge* e) { childrenEdges.erase(remove(childrenEdges.begin(), childrenEdges.end(), e), childrenEdges.end());}
-
-  //Constructor
-  Node(string n, int w, int i)
+//Constructor
+GNode::GNode(string n, int w, int i)
       : name(n),
       visited(false),
       weight(w),
       id(i){}
-};
 
-class Edge{
-  int id;
-  Node* src;
-  Node* dst;
-  int weight;
-public:
-  int getWeight() { return weight;}
-  int getID() { return id;}
-  Node* getSrc() { return src;}
-  Node* getDst() { return dst;}
-  void setWeight(int w){ weight = w;}
-  void setSrc(Node* n) { src = n;}
-  void setDst(Node* n) { dst = n;}
+GEdge* GNode::edgeTo(string targetName) {
+    GEdge* res;
+    for(GEdge* e : this->childrenEdges) {
+      if(e->getDst()->getName() == targetName) {
+        res = e;
+        break;
+      }
+    }
+    return res;
+}
+void GNode::addEdge(GEdge* e) { this->childrenEdges.push_back(e);}
+/////////////////////////////////////////////////////
 
-  //Constructor 1
-  Edge(int w, Node* s, Node* d, int i)
+int GEdge::getWeight() { return this->weight;}
+int GEdge::getID() { return this->id;}
+GNode* GEdge::getSrc() { return this->src;}
+GNode* GEdge::getDst() { return this->dst;}
+void GEdge::setWeight(int w){ this->weight = w;}
+void GEdge::setSrc(GNode* n) { this->src = n;}
+void GEdge::setDst(GNode* n) { this->dst = n;}
+
+//Constructor
+GEdge::GEdge(int w, GNode* s, GNode* d, int i)
       : weight(w),
       src(s),
       dst(d),
       id(i){}
-  Edge() {}
-};
+//////////////////////DGraph/////////////////////////////
 
-class DGraph { 
-  vector<Edge*> edges;
-  vector<Node*> nodes;
-public:
-  vector<Edge*> getEdges() { return edges;}
-  vector<Node*> getNodes() { return nodes;}
+GNode* DGraph::addNode(string l, int weight) {
+    int id = this->nodes.size();
 
-  Node* addNode(string l, int weight) {
-    int id = nodes.size();
-
-    Node* n = new Node(l, weight, id);
-    nodes.push_back(n);
+    GNode* n = new GNode(l, weight, id);
+    if(this->nodes.count(l) != 1) {
+      this->nodes[l] = n;
+    }
 
     return n;
-  }
-  Edge* addEdge(int weigth, int from, int to) { 
-    if((from >=0 && to >=0) && (from < nodes.size() && to < nodes.size())) {
-      Node* src = nodes.at(from);
-      Node* dst = nodes.at(to);
+}
+GEdge* DGraph::addEdge(int weigth, string from, string to) { 
+    
+    GNode* src = this->nodes.at(from);
+    GNode* dst = this->nodes.at(to);
 
-      int id = edges.size();
+    int id = this->edges.size();
 
-      Edge* edge = new Edge(weigth, src, dst, id);
+    GEdge* edge = new GEdge(weigth, src, dst, id);
 
-      (*src).addEdge(edge);
-      edges.push_back(edge);
+    (*src).addEdge(edge);
+    this->edges.push_back(edge);
 
-      return edge;
+    return edge;
+}
+////////////////////DGraph///////////////////////////
 
-    }
-    else {
-      return new Edge();
-    }
-  }
-};
+stack<GNode*> retractionStack;
 
 void exportToDot(DGraph g) {
   printf("digraph G{\n");
 
   //Traverse the edges
-  for(Edge* e: g.getEdges()) {
+  for(GEdge* e: g.getEdges()) {
     printf("%s->%s;\n", e->getSrc()->getName().c_str(), e->getDst()->getName().c_str());
   }
   printf("}");
@@ -124,6 +128,7 @@ DGraph generateRandomDAG(int chance, int maxRanks, int minRanks, int minPerRank,
   int i, j, k, nodes = 0;
   srand (time (NULL));
   DGraph g;
+  //map<>
   int ranks = minRanks
               + (rand () % (maxRanks - minRanks + 1));
   for (i = 0; i < ranks; i++) {
@@ -133,11 +138,11 @@ DGraph generateRandomDAG(int chance, int maxRanks, int minRanks, int minPerRank,
 
     // Edges from old nodes ('nodes') to new ones ('new_nodes').  
     for(j = 0; j < nodes; j++) {
-      Node* src = g.addNode("n"+to_string(j), 10);
+      GNode* src = g.addNode("n"+to_string(j), 10);
       for(k = 0; k < new_nodes; k++) {
-        Node* dst = g.addNode("n"+to_string(k+nodes), 5);
+        GNode* dst = g.addNode("n"+to_string(k+nodes), 5);
         if( (rand () % 100) < chance)
-          g.addEdge(5, src->getID(), dst->getID());
+          g.addEdge(5, src->getName(), dst->getName());
 
             //printf ("  %d -> %d;\n", j, k + nodes); /* An Edge*/.  
       }
@@ -146,37 +151,56 @@ DGraph generateRandomDAG(int chance, int maxRanks, int minRanks, int minPerRank,
   }
   return g;
 }
-
+/*
 Node* findPostDom(Node* current, vector<Node*> path) {
 
-}
+}*/
 
-int atomicCost(vector<Node*> leftPath, vector<Node*> rightPath, int device ) {
-  int leftCost = 0;
-  int rightCost = 0;
-  int maxCost = 0;
+void atomicCost(vector<GNode*> leftPath, vector<Node*> rightPath, int device ) {
+ 
+  int totCost = 0;
 
-  int timeLineStart = 0;
-  
-  Node* parent = leftPath.at(0);
-  Node* current = rightPath.at(0);
-  Node* postDom = leftPath.at(leftPath.size()-1);
+  vector<TimePartition*> timeLine;
+  //int timeLineEnd = 0;
+  //Create bins for each device
+  //map<int, vector<Node*>> devQueues;
 
-  for(Node* n: leftPath) {
-    leftCost += n->getWeight();
-  }
+  //Node* parent = leftPath.at(0);
+  //Node* current = rightPath.at(0);
+  //Node* postDom = leftPath.at(leftPath.size()-1);
 
-  for(Node* n: rightPath) {
-    if(parent.device != current.device) {
-      rightCost += parent->edgeTo(current);
+  bool done = false;
+  int tempStart = 0;
+  int tempEnd = 0;
+  //Create the timeline
+  for(int i=1; i < leftPath.size()-1; i++) {
+    
+
+    GNode* cur = leftPath.at(i);
+    GNode* prev = leftPath.at(i-1);
+
+    if(prev->getDevice() != cur->getDevice()) {
+      
+      tempEnd += prev->edgeTo(cur->getName())->getWeight();
+      TimePartition* comTP = new TimePartition(tempStart, tempEnd, -1);
+      timeLine.push_back(comTP);
+      tempStart = tempEnd; 
     }
-    rightCost += n->getWeight();
-  }
+    tempEnd += cur->getWeight();
+    TimePartition* tp = new TimePartition(tempStart, tempEnd, cur->getDevice());
 
-  if(rightCost > leftCost) {
-
+    timeLine.push_back(tp);
   }
+  if(rightPath.at(0)->getDevice() == leftPath.at(0)) {
+    
+  }
+  for(TimePartition* el : timeLine) {
+    el->printTP();
+  }
+  
+
 }
+/*
 int assignDevice(Node* current, Node* parent) {
   vector<Node*> path;
   path.push_back(parent);
@@ -191,12 +215,58 @@ int assignDevice(Node* current, Node* parent) {
 
   return min(cost(current))
 }
-
+*/
 int main (void)
 {
+  /*Test for atomicCost function
+  vector<GNode*> leftPath;
+  leftPath.push_back(new GNode("n1", 3, 1));
+  leftPath.push_back(new GNode("n2", 5, 2));
+  leftPath.push_back(new GNode("n3", 8, 3));
+  leftPath.push_back(new GNode("n4", 10, 4));
+  leftPath.push_back(new GNode("n5", 12, 5));
+
+  GEdge* e = new GEdge(10, leftPath.at(0), leftPath.at(1), 1);
+  leftPath.at(0)->addEdge(e);
+  leftPath.at(1)->addEdge(new GEdge(2, leftPath.at(1), leftPath.at(2), 2));
+  leftPath.at(2)->addEdge(new GEdge(1, leftPath.at(2), leftPath.at(3), 3));
+  leftPath.at(3)->addEdge(new GEdge(3, leftPath.at(3), leftPath.at(4), 4));
+
+  leftPath.at(0)->setDevice(0);
+  leftPath.at(1)->setDevice(1);
+  leftPath.at(2)->setDevice(2);
+  leftPath.at(3)->setDevice(3);
+  leftPath.at(4)->setDevice(0);
+
   
+  atomicCost(leftPath);
+
+  /*
+  map<int,vector<Node*>> testQueues;
+
+  //Test for 
   DGraph g = generateRandomDAG(CHANCE, MAX_RANKS, MIN_RANKS, MIN_PER_RANK, MAX_PER_RANK );
   //Test the graph implementation
+  for(Node* n: g.getNodes()) {
+    if(n->getID()%2 == 0) {
+      n->setDevice(0);
+    }
+    else {
+      n->setDevice(1);
+    }
+  }
+  for(Node* n: g.getNodes()) {
+    testQueues[n->getDevice()].push_back(n);
+  }
+
+  for(auto& kv: testQueues) {
+    printf("Queue for device %d:\n\n", kv.first);
+    for(Node*n : kv.second) {
+      printf("Node: %s, ", n->getName().c_str());
+    }
+    printf("\n");
+  }
+
   exportToDot(g);
 
 

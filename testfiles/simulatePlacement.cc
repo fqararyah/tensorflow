@@ -6,6 +6,7 @@
 #include <vector>
 #include <stack>
 #include <map>
+#include <set>
 #include "simulatePlacement.h"
 
 #define MIN_PER_RANK 1 /* Nodes/Rank: How 'fat' the DAG should be.  */
@@ -16,11 +17,13 @@
 
 
 using namespace std;
+
 /*
 class DGraph;
 class Node;
 class Edge;
 */
+
 void exportToDot(DGraph g);
 ////TimePartition./////
 bool TimePartition::containsTP(TimePartition* tp){
@@ -29,10 +32,10 @@ bool TimePartition::containsTP(TimePartition* tp){
   }
   else {
     if((tp->getEnd() < this->getStart()) || (tp->getStart() > this->getEnd())) {
-      return true;
+      return false;
     }
     else {
-      return false;
+      return true;
     }
 
   }
@@ -160,23 +163,29 @@ DGraph generateRandomDAG(int chance, int maxRanks, int minRanks, int minPerRank,
   }
   return g;
 }
-/*
-Node* findPostDom(Node* current, vector<Node*> path) {
 
-}*/
+vector<GNode*> findPostDom(GNode* current, vector<GNode*> path) {
+  vector<GNode*> res;
+  bool found =false;
+  while(!found) {
+    for(GNode* n : path) {
+      if(current->getChildrenEdges().at(0)->getDst()->getName() == n->getName()) {
+        found = true;
+        res.push_back(n);
+        break;
+      }
+      else {
+        res.push_back(current);
+      }
+    }
+    current = current->getChildrenEdges().at(0)->getDst();
+  }
+  return res;
+}
 
 int atomicCost(vector<GNode*> leftPath, vector<GNode*> rightPath, int device ) {
  
-  int rightCost = 0;
-
   vector<TimePartition*> timeLine;
-  //int timeLineEnd = 0;
-  //Create bins for each device
-  //map<int, vector<Node*>> devQueues;
-
-  //Node* parent = leftPath.at(0);
-  //Node* current = rightPath.at(0);
-  //Node* postDom = leftPath.at(leftPath.size()-1);
 
   bool done = false;
   int tempStartLeft = 0;
@@ -234,22 +243,101 @@ int atomicCost(vector<GNode*> leftPath, vector<GNode*> rightPath, int device ) {
     return tempEndRight;
   }
 }
-/*
-int assignDevice(Node* current, Node* parent) {
-  vector<Node*> path;
-  path.push_back(parent);
 
-  while(retractionStack.top()->getChildrenEdges.size() < 2) {
-    path.push_back(retractionStack.pop());
+bool isPostDom(GNode* pdCand, GNode* current) {
+  bool isFound = false;
+
+  while(!isFound) {
+    if(current->getName() == pdCand->getName()){
+      isFound = true;
+    }
+    else {
+      current = current->getChildrenEdges.at(0)->getDst();
+    }
   }
-  path.push_back(retractionStack.top());
-
-  Node* postDominator = findPostDom(current, path);
-  Node* sibling = path.at(1);
-
-  return min(cost(current))
+  return isFound;
 }
-*/
+int assignDevice(GNode* current, GNode* parent) {
+  vector<GNode*> leftPath;
+  vector<GNode*> rightPath;
+
+  //Extract left path
+  leftPath.push_back(parent);
+  retractionStack.pop(); //pop parent
+  /*
+  while(retractionStack.top()->getChildrenEdges().size() < 2) {
+    leftPath.push_back(retractionStack.top());
+    retractionStack.pop();
+  }
+  */
+  bool pdFound = false;
+  while(!pdFound) {
+    GNode* pdCand = retractionStack.top();
+    pdFound = isPostDom(pdCand, current);
+    if(!pdFound) {
+      retractionStack.pop();
+      leftPath.push_back(pdCand);
+    }
+  }
+  //assert(pdFound);
+  GNode* postDominator = retractionStack.top();
+  leftPath.push_back(postDominator);
+
+  //extract right path and post-dominator
+
+  //rightPath = findPostDom(current, leftPath);
+
+  // GNode* postDominator = rightPath.back();
+  rightPath.pop_back();
+  
+  //GNode* parent = leftPath.at(0);
+  GNode* sibling = leftPath.at(1);
+
+
+  //calc cost for all 4 scenarios
+  set<int> avlDevices;
+
+  avlDevices.insert(parent->getDevice());
+  avlDevices.insert(sibling->getDevice());
+  avlDevices.insert(postDominator->getDevice());
+
+  /*
+  int costParent = atomicCost(leftPath,rightPath,parent->getDevice());
+  int costSibling = atomicCost(leftPath,rightPath,sibling->getDevice());
+  int costPD = atomicCost(leftPath, rightPath, postDominator->getDevice());
+  */
+  minCost = 0;
+  minDev = 0;
+  for(auto d : avlDevices) {
+    int tempCost = atomicCost(leftPath, rightPath, d);
+    if(tempCost < minCost){
+      minCost = tempCost;
+      minDev = d;
+    }
+  }
+
+  return minDev;
+}
+
+isImmmediateChild(GNode* parent, GNode* current) {
+  if()
+}
+void customDFS(GNode* par, GNode* cur, bool turnPoint) {
+
+  if(!turnPoint) {
+    cur->setDevice(par->getDevice());
+  }
+  else {
+    cur->setDevice(assignDevice(cur, par));
+  }
+  for(GEdge* e : current->getChildrenEdges()) {
+    if(!e->getDst()->getVisited()) {
+      customDFS(cur, e->getDst(), !isImmmediateChild(par, cur));
+      retractionStack.push(cur);
+    }
+  }
+  cur->setVisited(true);
+}
 int main (void)
 {
   /*Test for atomicCost function
@@ -331,4 +419,13 @@ int main (void)
   printf ("}\n");
   return 0;
   */
+  set<int> avlDevices;
+
+  avlDevices.insert(1);
+  avlDevices.insert(2);
+  avlDevices.insert(3);
+
+  for(auto d : avlDevices) {
+    printf("%d ", d);
+  }
 }

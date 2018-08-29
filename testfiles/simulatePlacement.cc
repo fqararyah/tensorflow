@@ -24,12 +24,18 @@ class Edge;
 void exportToDot(DGraph g);
 ////TimePartition./////
 bool TimePartition::containsTP(TimePartition* tp){
-  if(this->start <= tp->start && this->end >= tp->end) {
+  if(tp->getDevice() != this->device || this->device == -1) {
+    return false;
+  }
+  else {
+    if((tp->getEnd() < this->getStart()) || (tp->getStart() > this->getEnd())) {
       return true;
     }
     else {
       return false;
     }
+
+  }
 }
 void TimePartition::printTP() {
     printf("Start: %d,", this->start);
@@ -69,6 +75,7 @@ GEdge* GNode::edgeTo(string targetName) {
 void GNode::addEdge(GEdge* e) { this->childrenEdges.push_back(e);}
 /////////////////////////////////////////////////////
 
+////////////////////////Edge/////////////////////////
 int GEdge::getWeight() { return this->weight;}
 int GEdge::getID() { return this->id;}
 GNode* GEdge::getSrc() { return this->src;}
@@ -83,6 +90,8 @@ GEdge::GEdge(int w, GNode* s, GNode* d, int i)
       src(s),
       dst(d),
       id(i){}
+////////////////////////////////////////////////////////
+
 //////////////////////DGraph/////////////////////////////
 
 GNode* DGraph::addNode(string l, int weight) {
@@ -156,9 +165,9 @@ Node* findPostDom(Node* current, vector<Node*> path) {
 
 }*/
 
-void atomicCost(vector<GNode*> leftPath, vector<Node*> rightPath, int device ) {
+int atomicCost(vector<GNode*> leftPath, vector<GNode*> rightPath, int device ) {
  
-  int totCost = 0;
+  int rightCost = 0;
 
   vector<TimePartition*> timeLine;
   //int timeLineEnd = 0;
@@ -170,8 +179,8 @@ void atomicCost(vector<GNode*> leftPath, vector<Node*> rightPath, int device ) {
   //Node* postDom = leftPath.at(leftPath.size()-1);
 
   bool done = false;
-  int tempStart = 0;
-  int tempEnd = 0;
+  int tempStartLeft = 0;
+  int tempEndLeft = 0;
   //Create the timeline
   for(int i=1; i < leftPath.size()-1; i++) {
     
@@ -181,24 +190,49 @@ void atomicCost(vector<GNode*> leftPath, vector<Node*> rightPath, int device ) {
 
     if(prev->getDevice() != cur->getDevice()) {
       
-      tempEnd += prev->edgeTo(cur->getName())->getWeight();
-      TimePartition* comTP = new TimePartition(tempStart, tempEnd, -1);
+      tempEndLeft += prev->edgeTo(cur->getName())->getWeight();
+      TimePartition* comTP = new TimePartition(tempStartLeft, tempEndLeft, -1);
       timeLine.push_back(comTP);
-      tempStart = tempEnd; 
+      tempStartLeft = tempEndLeft; 
     }
-    tempEnd += cur->getWeight();
-    TimePartition* tp = new TimePartition(tempStart, tempEnd, cur->getDevice());
+    tempEndLeft += cur->getWeight();
+    TimePartition* tp = new TimePartition(tempStartLeft, tempEndLeft, cur->getDevice());
 
     timeLine.push_back(tp);
   }
-  if(rightPath.at(0)->getDevice() == leftPath.at(0)) {
-    
-  }
-  for(TimePartition* el : timeLine) {
-    el->printTP();
-  }
-  
+  int tempStartRight = 0;
+  int tempEndRight = 0;
+  TimePartition* tprc; //communication cost
+  //If we place the node on its parent's device -- no communication cost
+  if(rightPath.at(0)->getDevice() != leftPath.at(0)->getDevice()) {
 
+    tempStartRight += leftPath.at(0)->edgeTo(rightPath.at(0)->getName())->getWeight();
+  }
+  for(GNode* n : rightPath) {
+    tempEndRight = tempStartRight + n->getWeight();
+    TimePartition* temptp = new TimePartition(tempStartRight, tempEndRight, device);
+    //Scan the left path timeline to estimate idleness cost
+    for(TimePartition* t : timeLine) {
+      if(!t->containsTP(temptp)) {
+        tempEndRight += n->getWeight();
+        break;
+      }
+      else {
+        temptp->setStart(t->getEnd());
+        temptp->setEnd(temptp->getStart() +n->getWeight());
+        tempEndRight = temptp->getEnd();
+      }
+    }
+  }
+  if(rightPath.back()->getDevice() != leftPath.back()->getDevice()) { 
+    tempEndRight += rightPath.back()->edgeTo(leftPath.back()->getName())->getWeight();
+  }
+  if(timeLine.back()->getEnd() >= tempEndRight ) {
+    return timeLine.back()->getEnd(); // left bracnh's timeline dominates the execution time
+  }
+  else {
+    return tempEndRight;
+  }
 }
 /*
 int assignDevice(Node* current, Node* parent) {

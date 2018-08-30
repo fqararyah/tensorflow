@@ -1,0 +1,2 @@
+N [weight >= 50] {color="red"}
+N [weight < 50] {color="green"}

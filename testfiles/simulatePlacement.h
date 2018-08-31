@@ -60,6 +60,7 @@ public:
   int getOutDeg();
   void setInDeg(int v);
   void setOutDeg(int v);
+  void setName(string n);
 
   GEdge edgeTo(string targetName);
   void addEdge(GEdge e);

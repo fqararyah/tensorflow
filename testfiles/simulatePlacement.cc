@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <stack>
@@ -10,10 +11,10 @@
 #include "simulatePlacement.h"
 
 #define MIN_PER_RANK 5 /* Nodes/Rank: How 'fat' the DAG should be.  */
-#define MAX_PER_RANK 10
-#define MIN_RANKS 10    /* Ranks: How 'tall' the DAG should be.  */
-#define MAX_RANKS 20
-#define CHANCE 20     /* Chance of having an Edge.  */
+#define MAX_PER_RANK 5
+#define MIN_RANKS 5 /* Ranks: How 'tall' the DAG should be.  */
+#define MAX_RANKS 5
+#define CHANCE 15     /* Chance of having an Edge.  */
 
 
 using namespace std;
@@ -62,6 +63,7 @@ int GNode::getInDeg(){ return this->inDeg;}
 int GNode::getOutDeg() { return this->outDeg;}
 void GNode::setInDeg(int val) { this->inDeg = val;}
 void GNode::setOutDeg(int val) { this->outDeg = val;}
+void GNode::setName(string n) { this->name = n;}
 
 //Constructor
 GNode::GNode(string n, int w, int i)
@@ -70,10 +72,16 @@ GNode::GNode(string n, int w, int i)
       weight(w),
       inDeg(0),
       outDeg(0),
-      id(i){}
+      id(i),
+      childrenEdges(vector<GEdge>()){}
 
 GNode::GNode()
-      : name(""){}
+      : name(""),
+       weight(0),
+       visited(false),
+       device(0),
+       inDeg(0),
+       outDeg(0){}
 
 GEdge GNode::edgeTo(string targetName) {
     GEdge res;
@@ -124,19 +132,25 @@ GNode DGraph::addNode(string l, int weight) {
 }
 GEdge DGraph::addEdge(int weight, string from, string to) { 
     
-    GNode src = this->nodes.at(from);
-    GNode dst = this->nodes.at(to);
-
+    GNode src = this->nodes[from];
+    GNode dst = this->nodes[to];
+    printf("==================\n");
+    printf("Src: %s\n",src.getName().c_str());
+    printf("Dst: %s\n",dst.getName().c_str());
+    printf("==================\n");
     int id = this->edges.size();
 
     GEdge edge(weight, src, dst, id);
+    GNode* pSrc = &this->nodes[from];
+    GNode* pDst = &this->nodes[to];
 
-    src.addEdge(edge);
-    src.setOutDeg(src.getOutDeg() + 1);
-    dst.setInDeg(dst.getInDeg() + 1);
+    pSrc->addEdge(edge);
+    pSrc->setOutDeg(this->nodes.at(from).getOutDeg() + 1);
+    pDst->setInDeg(this->nodes.at(to).getInDeg() + 1);
 
     this->edges.push_back(edge);
 
+    
     return edge;
 }
 vector<GNode> DGraph::getNodes() {
@@ -148,9 +162,12 @@ vector<GNode> DGraph::getNodes() {
 }
 GNode DGraph::getNode(string l) {
   printf("Entered getNode\n");
-  GNode tar = this->nodes.find(l)->second;
-  if(tar.getName() != this->nodes.end()->second.getName()) {
-    return tar;
+  //GNode tar = this->nodes.find(l)->second;
+  //printf("%s153\n", tar.getName().c_str());
+  //GNode end = this->nodes.end()->second;
+  
+  if(nodes.count(l) >= 1) {
+    return this->nodes.find(l)->second;
   }
   else {
     return GNode("INV", -1, -1);
@@ -179,17 +196,23 @@ void DGraph::addSourceAndSink() {
 stack<GNode> retractionStack;
 
 void exportToDot(DGraph g) {
-  printf("digraph G{\n");
+  ofstream dotfile;
+  dotfile.open("sim.dot");
+
+  dotfile << "digraph G{\n";
 
   //Traverse the nodes
   for(GNode n : g.getNodes()) {
-    printf("%s [weight=%d];\n", n.getName().c_str(), n.getWeight());
+    dotfile << n.getName().c_str()<< " [weight="<<n.getWeight()<<"];\n";
   }
   //Traverse the edges
   for(GEdge e: g.getEdges()) {
-    printf("%s->%s;\n", e.getSrc().getName().c_str(), e.getDst().getName().c_str());
+    dotfile << e.getSrc().getName().c_str() <<"->"<<e.getDst().getName().c_str()<<";\n";
+    //printf("%s->%s;\n", e.getSrc().getName().c_str(), e.getDst().getName().c_str());
   }
-  printf("}");
+  dotfile << "}\n";
+
+  dotfile.close();
 }
 
 DGraph generateRandomDAG(int chance, int maxRanks, int minRanks, int minPerRank, int maxPerRank) {
@@ -211,6 +234,7 @@ DGraph generateRandomDAG(int chance, int maxRanks, int minRanks, int minPerRank,
       for(k = 0; k < new_nodes; k++) {
         GNode dst = g.addNode("n"+to_string(k+nodes), 2 + (rand() % static_cast<int>(121)));
         if( (rand () % 100) < chance)
+          
           g.addEdge(2 + (rand() % static_cast<int>(121)), src.getName(), dst.getName());
 
             //printf ("  %d -> %d;\n", j, k + nodes); /* An Edge*/.  
@@ -307,6 +331,9 @@ int atomicCost(vector<GNode> leftPath, vector<GNode> rightPath, int device ) {
 bool isPostDom(GNode pdCand, GNode current) {
   bool isFound = false;
 
+  if(current.getChildrenEdges().empty()) {
+    printf("%s empty\n", current.getName().c_str());
+  }
   while(!isFound) {
     if(current.getName() == pdCand.getName()){
       isFound = true;
@@ -401,14 +428,23 @@ bool isImmmediateChild(GNode parent, GNode current) {
 
 void customDFS(GNode parent, GNode current, bool turnPoint) {
   printf("Entered customDFS\n");
-  fflush(stdout);
+  //fflush(stdout);
+  //DEBUG RECURSIVE CALL
+  printf("Parent: %s \n", parent.getName().c_str());
+  printf("Current: %s \n", current.getName().c_str());
   if(!turnPoint) {
     printf("Entered !turnPoint\n");
     current.setDevice(parent.getDevice());
   }
   else {
+    printf("Entered turnPoint\n");
     current.setDevice(assignDevice(current, parent));
   }
+  //printf()
+  for(GEdge e : current.getChildrenEdges()) {
+    printf("%s, ", e.getDst().getName().c_str());
+  }
+  printf("\n");
   for(GEdge e : current.getChildrenEdges()) {
     if(!e.getDst().getVisited()) {
       customDFS(current, e.getDst(), !isImmmediateChild(parent, current));
@@ -421,19 +457,27 @@ void customDFS(GNode parent, GNode current, bool turnPoint) {
 void executeDFS(DGraph g) {
   printf("Before getNode for root\n");
   GNode root = g.getNode("SOURCE_");
-  printf("%s\n", root.getName().c_str());
-
+  printf("%s428\n", root.getName().c_str());
+  if(root.getChildrenEdges().empty()) {
+    printf("True\n");
+  }
   printf("Before getNode for root\n");
+
+
   if(root.getID() != -1) {
+    GNode virParent = GNode();
+    virParent.setName("ROOT_");
+    GEdge rootToSrc = GEdge(0, virParent, root, -2);
+    virParent.addEdge(rootToSrc);
     printf("Before customDFS\n");
-    customDFS(root, root.getChildrenEdges().at(0).getDst(), false);
+    customDFS(virParent, root, false);
   }
   else{
     printf("Error: Graph is invalid");
   }
   printf("Exiting executeDFS\n");
 }
-int main (void)
+int main ()
 {
   /*Test for atomicCost function
   vector<GNode*> leftPath;
@@ -471,15 +515,17 @@ int main (void)
     printf("It does not work\n");
   }
   */
-  printf("Exiting executeDFS\n");
+  
   DGraph g = generateRandomDAG(CHANCE, MAX_RANKS, MIN_RANKS, MIN_PER_RANK, MAX_PER_RANK );
+ 
   g.addSourceAndSink();
+
   GNode testroot = g.getNode("SOURCE_");
-  //testroot.getChildrenEdges();
-  GEdge testref = GEdge();
-  testroot.addEdge(testref);
   if(testroot.getChildrenEdges().empty()) {
-    printf("True");
+    printf("True486\n");
+  }
+  else {
+    printf("It works: %s\n",testroot.getChildrenEdges().at(0).getDst().getName().c_str());
   }
   exportToDot(g);
   //Test the graph implementation

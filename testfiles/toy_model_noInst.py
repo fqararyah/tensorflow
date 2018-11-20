@@ -42,6 +42,9 @@ with tf.Session(graph=toy_graph, config=tf.ConfigProto(allow_soft_placement=True
 	sess.run(add_fin, options=options, run_metadata=run_metadata)
 
 	#Create the timeline and write it to a json file
+	print "Step Stats:"
+	print run_metadata.step_stats
+	
 	fetched_timeline = timeline.Timeline(run_metadata.step_stats)
 	chrome_trace = fetched_timeline.generate_chrome_trace_format()
 	with open('timelineLatest.json', 'w') as f:

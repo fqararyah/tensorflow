@@ -69,3 +69,594 @@
 "toy_op/Add" -> "_SINK";
 Initialization complete
 
+Step Stats:
+dev_stats {
+  device: "/device:GPU:0/stream:36"
+  node_stats {
+    node_name: "edge_17_toy_op/Add:MEMCPYDtoH"
+    all_start_micros: 1542677595648665
+    op_end_rel_micros: 5090
+    all_end_rel_micros: 5090
+    timeline_label: "MEMCPYDtoH 67108864 bytes (Device to Pinned)"
+  }
+}
+dev_stats {
+  device: "/device:GPU:0/stream:34"
+  node_stats {
+    node_name: "toy_op/MatMul:MatMul"
+    all_start_micros: 1542677595581396
+    op_end_rel_micros: 10632
+    all_end_rel_micros: 10632
+  }
+  node_stats {
+    node_name: "toy_op/Add:Add"
+    all_start_micros: 1542677595611294
+    op_end_rel_micros: 247
+    all_end_rel_micros: 247
+  }
+}
+dev_stats {
+  device: "/device:GPU:0/stream:41"
+  node_stats {
+    node_name: "edge_11_toy_op/MatMul_1:MEMCPYPtoP"
+    all_start_micros: 1542677595608348
+    op_end_rel_micros: 2768
+    all_end_rel_micros: 2768
+    timeline_label: "MEMCPYPtoP 67108864 bytes (Device to Device)"
+  }
+}
+dev_stats {
+  device: "/device:GPU:0/stream:37"
+  node_stats {
+    node_name: "edge_8_toy_op/matrix_3/read:MEMCPYPtoP"
+    all_start_micros: 1542677595592029
+    op_end_rel_micros: 2769
+    all_end_rel_micros: 2769
+    timeline_label: "MEMCPYPtoP 67108864 bytes (Device to Device)"
+  }
+  node_stats {
+    node_name: "edge_9_toy_op/matrix_4/read:MEMCPYPtoP"
+    all_start_micros: 1542677595594802
+    op_end_rel_micros: 2767
+    all_end_rel_micros: 2767
+    timeline_label: "MEMCPYPtoP 67108864 bytes (Device to Device)"
+  }
+}
+dev_stats {
+  device: "/job:localhost/replica:0/task:0/device:CPU:0"
+  node_stats {
+    node_name: "_SOURCE"
+    all_start_micros: 1542677595581041
+    op_start_rel_micros: 1
+    op_end_rel_micros: 3
+    all_end_rel_micros: 8
+    timeline_label: "_SOURCE = NoOp()"
+    scheduled_micros: 1542677595581022
+    memory_stats {
+    }
+  }
+  node_stats {
+    node_name: "_retval_toy_op/Add_0_0"
+    all_start_micros: 1542677595653827
+    op_start_rel_micros: 1
+    op_end_rel_micros: 4
+    all_end_rel_micros: 7
+    timeline_label: "_retval_toy_op/Add_0_0 = _Retval(toy_op/Add/_7)"
+    scheduled_micros: 1542677595653822
+    memory_stats {
+    }
+  }
+}
+dev_stats {
+  device: "/device:GPU:0/memcpy"
+  node_stats {
+    node_name: "edge_8_toy_op/matrix_3/read:MEMCPYPtoP"
+    all_start_micros: 1542677595592029
+    op_end_rel_micros: 2769
+    all_end_rel_micros: 2769
+    timeline_label: "MEMCPYPtoP 67108864 bytes (Device to Device)"
+  }
+  node_stats {
+    node_name: "edge_9_toy_op/matrix_4/read:MEMCPYPtoP"
+    all_start_micros: 1542677595594802
+    op_end_rel_micros: 2767
+    all_end_rel_micros: 2767
+    timeline_label: "MEMCPYPtoP 67108864 bytes (Device to Device)"
+  }
+  node_stats {
+    node_name: "edge_11_toy_op/MatMul_1:MEMCPYPtoP"
+    all_start_micros: 1542677595608348
+    op_end_rel_micros: 2768
+    all_end_rel_micros: 2768
+    timeline_label: "MEMCPYPtoP 67108864 bytes (Device to Device)"
+  }
+  node_stats {
+    node_name: "edge_17_toy_op/Add:MEMCPYDtoH"
+    all_start_micros: 1542677595648665
+    op_end_rel_micros: 5090
+    all_end_rel_micros: 5090
+    timeline_label: "MEMCPYDtoH 67108864 bytes (Device to Pinned)"
+  }
+}
+dev_stats {
+  device: "/device:GPU:0/stream:all"
+  node_stats {
+    node_name: "toy_op/MatMul:MatMul"
+    all_start_micros: 1542677595581396
+    op_end_rel_micros: 10632
+    all_end_rel_micros: 10632
+  }
+  node_stats {
+    node_name: "toy_op/MatMul_1:MatMul"
+    all_start_micros: 1542677595597708
+    op_end_rel_micros: 10635
+    all_end_rel_micros: 10635
+  }
+  node_stats {
+    node_name: "toy_op/Add:Add"
+    all_start_micros: 1542677595611294
+    op_end_rel_micros: 247
+    all_end_rel_micros: 247
+  }
+}
+dev_stats {
+  device: "/device:GPU:0/stream:38"
+  node_stats {
+    node_name: "toy_op/MatMul_1:MatMul"
+    all_start_micros: 1542677595597708
+    op_end_rel_micros: 10635
+    all_end_rel_micros: 10635
+  }
+}
+dev_stats {
+  device: "/job:localhost/replica:0/task:0/device:GPU:1"
+  node_stats {
+    node_name: "_SOURCE"
+    all_start_micros: 1542677595581048
+    op_start_rel_micros: 13
+    op_end_rel_micros: 29
+    all_end_rel_micros: 35
+    memory {
+      allocator_name: "GPU_1_bfc"
+      allocator_bytes_in_use: 1280
+    }
+    timeline_label: "_SOURCE = NoOp()"
+    scheduled_micros: 1542677595581015
+    memory_stats {
+    }
+  }
+  node_stats {
+    node_name: "toy_op/MatMul_1"
+    all_start_micros: 1542677595597628
+    op_start_rel_micros: 2
+    op_end_rel_micros: 82
+    all_end_rel_micros: 95
+    memory {
+      allocator_name: "GPU_1_bfc"
+      total_bytes: 67108864
+      peak_bytes: 67108864
+      live_bytes: 67108864
+      allocator_bytes_in_use: 201327872
+      allocation_records {
+        alloc_micros: 1542677595597640
+        alloc_bytes: 67108864
+      }
+      allocation_records {
+        alloc_micros: 1542677595611187
+        alloc_bytes: -67108864
+      }
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_1_bfc"
+          allocation_id: 4
+          has_single_reference: true
+          ptr: 1117595370752
+        }
+      }
+    }
+    timeline_label: "[GPU_1_bfc 64.0MB 64.0MB] toy_op/MatMul_1 = MatMul(toy_op/matrix_3/read/_1, toy_op/matrix_4/read/_3)"
+    scheduled_micros: 1542677595597608
+    memory_stats {
+    }
+  }
+}
+dev_stats {
+  device: "/job:localhost/replica:0/task:0/device:GPU:0"
+  node_stats {
+    node_name: "_SOURCE"
+    all_start_micros: 1542677595581044
+    op_start_rel_micros: 11
+    op_end_rel_micros: 41
+    all_end_rel_micros: 48
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 268436736
+    }
+    timeline_label: "_SOURCE = NoOp()"
+    scheduled_micros: 1542677595581003
+    memory_stats {
+    }
+  }
+  node_stats {
+    node_name: "toy_op/matrix_1"
+    all_start_micros: 1542677595581110
+    op_start_rel_micros: 1
+    op_end_rel_micros: 22
+    all_end_rel_micros: 27
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 268436736
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 2
+          has_single_reference: true
+          ptr: 1101885605120
+        }
+      }
+    }
+    timeline_label: "toy_op/matrix_1 = VariableV2()"
+    scheduled_micros: 1542677595581092
+    memory_stats {
+      persistent_memory_size: 67108864
+    }
+  }
+  node_stats {
+    node_name: "toy_op/matrix_2"
+    all_start_micros: 1542677595581140
+    op_start_rel_micros: 1
+    op_end_rel_micros: 6
+    all_end_rel_micros: 8
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 268436736
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 3
+          has_single_reference: true
+          ptr: 1101952713984
+        }
+      }
+    }
+    timeline_label: "toy_op/matrix_2 = VariableV2()"
+    scheduled_micros: 1542677595581137
+    memory_stats {
+      persistent_memory_size: 67108864
+    }
+  }
+  node_stats {
+    node_name: "toy_op/matrix_3"
+    all_start_micros: 1542677595581150
+    op_start_rel_micros: 1
+    op_end_rel_micros: 7
+    all_end_rel_micros: 10
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 268436736
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 4
+          has_single_reference: true
+          ptr: 1102019822848
+        }
+      }
+    }
+    timeline_label: "toy_op/matrix_3 = VariableV2()"
+    scheduled_micros: 1542677595581148
+    memory_stats {
+      persistent_memory_size: 67108864
+    }
+  }
+  node_stats {
+    node_name: "toy_op/matrix_4"
+    all_start_micros: 1542677595581162
+    op_end_rel_micros: 4
+    all_end_rel_micros: 6
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 268436736
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 5
+          has_single_reference: true
+          ptr: 1102086931712
+        }
+      }
+    }
+    timeline_label: "toy_op/matrix_4 = VariableV2()"
+    scheduled_micros: 1542677595581160
+    memory_stats {
+      persistent_memory_size: 67108864
+    }
+  }
+  node_stats {
+    node_name: "toy_op/matrix_1/read"
+    all_start_micros: 1542677595581170
+    op_start_rel_micros: 2
+    op_end_rel_micros: 5
+    all_end_rel_micros: 8
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 268436736
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 2
+          ptr: 1101885605120
+        }
+      }
+    }
+    timeline_label: "toy_op/matrix_1/read = Identity(toy_op/matrix_1)"
+    scheduled_micros: 1542677595581168
+    memory_stats {
+    }
+  }
+  node_stats {
+    node_name: "toy_op/matrix_2/read"
+    all_start_micros: 1542677595581180
+    op_start_rel_micros: 1
+    op_end_rel_micros: 5
+    all_end_rel_micros: 8
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 268436736
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 3
+          ptr: 1101952713984
+        }
+      }
+    }
+    timeline_label: "toy_op/matrix_2/read = Identity(toy_op/matrix_2)"
+    scheduled_micros: 1542677595581178
+    memory_stats {
+    }
+  }
+  node_stats {
+    node_name: "toy_op/matrix_3/read"
+    all_start_micros: 1542677595581190
+    op_start_rel_micros: 1
+    op_end_rel_micros: 2
+    all_end_rel_micros: 5
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 268436736
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 4
+          ptr: 1102019822848
+        }
+      }
+    }
+    timeline_label: "toy_op/matrix_3/read = Identity(toy_op/matrix_3)"
+    scheduled_micros: 1542677595581188
+    memory_stats {
+    }
+  }
+  node_stats {
+    node_name: "toy_op/matrix_4/read"
+    all_start_micros: 1542677595581197
+    op_end_rel_micros: 2
+    all_end_rel_micros: 4
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 268436736
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 5
+          ptr: 1102086931712
+        }
+      }
+    }
+    timeline_label: "toy_op/matrix_4/read = Identity(toy_op/matrix_4)"
+    scheduled_micros: 1542677595581195
+    memory_stats {
+    }
+  }
+  node_stats {
+    node_name: "toy_op/MatMul"
+    all_start_micros: 1542677595581206
+    op_start_rel_micros: 1
+    op_end_rel_micros: 318
+    all_end_rel_micros: 327
+    memory {
+      allocator_name: "GPU_0_bfc"
+      total_bytes: 67108864
+      peak_bytes: 67108864
+      live_bytes: 67108864
+      allocator_bytes_in_use: 335545600
+      allocation_records {
+        alloc_micros: 1542677595581217
+        alloc_bytes: 67108864
+      }
+      allocation_records {
+        alloc_micros: 1542677595653801
+        alloc_bytes: -67108864
+      }
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 6
+          has_single_reference: true
+          ptr: 1102154040576
+        }
+      }
+    }
+    timeline_label: "[GPU_0_bfc 64.0MB 64.0MB] toy_op/MatMul = MatMul(toy_op/matrix_1/read, toy_op/matrix_2/read)"
+    scheduled_micros: 1542677595581201
+    memory_stats {
+    }
+  }
+  node_stats {
+    node_name: "toy_op/Add"
+    all_start_micros: 1542677595611209
+    op_start_rel_micros: 3
+    op_end_rel_micros: 90
+    all_end_rel_micros: 102
+    memory {
+      allocator_name: "GPU_0_bfc"
+      allocator_bytes_in_use: 402654464
+    }
+    output {
+      tensor_description {
+        dtype: DT_FLOAT
+        shape {
+          dim {
+            size: 4096
+          }
+          dim {
+            size: 4096
+          }
+        }
+        allocation_description {
+          requested_bytes: 67108864
+          allocated_bytes: 67108864
+          allocator_name: "GPU_0_bfc"
+          allocation_id: 6
+          ptr: 1102154040576
+        }
+      }
+    }
+    timeline_label: "toy_op/Add = Add(toy_op/MatMul, toy_op/MatMul_1/_5)"
+    scheduled_micros: 1542677595611206
+    memory_stats {
+    }
+  }
+}
+
